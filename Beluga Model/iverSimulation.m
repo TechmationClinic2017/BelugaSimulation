@@ -1,29 +1,29 @@
 % Iver2 parameters
-m = 0; % mass of AUV
+m = 4.2173; % mass of AUV
 
 % Gravity
-xg = 0;
-zg = 0;
+xg = 1;
+zg = -1;
 
 % Moments of Inertia
-Ix = 0;
-Iy = 0;
-Iz = 0;
+Ix = 0.05;
+Iy = 2.05;
+Iz = 2.06;
 
-X_udot = 0;
-Y_vdot = 0;
-Z_wdot = 0;
+X_udot = -0.51334;
+Y_vdot = -23.8314;
+Z_wdot = -23.8314;
 
-Y_rdot = 0;
-Z_qdot = 0;
+Y_rdot = -2.5656;
+Z_qdot = 2.5656;
 
-K_pdot = 0;
-M_wdot = 0;
+K_pdot = -0.0704;
+M_wdot = 2.5656;
 
-M_qdot = 0;
-N_vdot = 0;
+M_qdot = -3.2455;
+N_vdot = -2.5656;
 
-N_rdot = 0;
+N_rdot = -3.2455;
 
 % Run simulation
-simOut = sim('iver_model.slx');
+[simOut, y] = sim('iver_model.slx');
