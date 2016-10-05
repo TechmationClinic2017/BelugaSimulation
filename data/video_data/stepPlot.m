@@ -1,5 +1,5 @@
-x = v1(:,1);
-y = v1(:,2);
+x = v25(:,1);
+y = v25(:,2);
 t = linspace(1,6,numel(x));
 
 % find origin
