@@ -2,8 +2,8 @@
 m = 4.2173; % mass of AUV
 
 % Gravity
-xg = 1;
-zg = -1;
+xg = 0;
+zg = 0;
 
 % Moments of Inertia
 Ix = 0.05;
@@ -26,4 +26,4 @@ N_vdot = -2.5656;
 N_rdot = -3.2455;
 
 % Run simulation
-[simOut, y] = sim('iver_model.slx');
+[simOut, y, z, q] = sim('iver_model.slx');
