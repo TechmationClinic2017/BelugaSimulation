@@ -1,6 +1,5 @@
 function intg = cdrag(xt,xt2,xn,xn2,d,a,a_offset,n,c,theta,l,lf,dx,xb);
-%This function performs the integration for the first equation of 4.8
-in
+%This function performs the integration for the first equation of 4.8 in
 %the REMUS thesis
 intg = 0;
 xti = l;

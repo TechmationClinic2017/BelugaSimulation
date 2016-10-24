@@ -1,11 +1,13 @@
-% Iver2 parameters
-m = 4.2173; % mass of AUV
+% Beluga parameters
 
-% Gravity
-xg = 0;
+
+m = 4.2173; % mass of IVER
+
+% Gravity IVER
+xg = 0; 
 zg = 0;
 
-% Moments of Inertia
+% Moments of Inertia IVER
 Ix = 0.05;
 Iy = 2.05;
 Iz = 2.06;
@@ -27,3 +29,19 @@ N_rdot = -3.2455;
 
 % Run simulation
 [simOut, y, z, q] = sim('beluga_model.slx');
+
+
+% Plot
+figure(1)
+subplot(2,1,1)
+plot(simOut, y(:,1))
+xlabel('Time (s)')
+ylabel('X Velocity (m/s)')
+title('Beluga Step Response: X Velocity vs. Time')
+
+subplot(2,1,2)
+plot(simOut, y(:,7))
+xlabel('Time (s)')
+ylabel('X Position (m)')
+title('Beluga Step Response: X Position vs. Time')
+
