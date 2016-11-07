@@ -47,8 +47,9 @@ function F = test(state, inputs)
     d = 0.076; %m
     rho = 1000; %kg/m^3
     for i = 1:numel(inputs)
-        n = sqrt(abs(inputs(i)/(rho*d^4*0.1858)));
+        n = sqrt((inputs(i)/(rho*d^4*0.1858)));
         Kt = 0.1858*(1-(u/(n*d)));
+        Kt(isnan(Kt))=0;
         inputs(i) = real(Kt*rho*n.^2*d^4);
     end
     
