@@ -1,6 +1,4 @@
 % Beluga parameters
-
-
 m = 4.2173; % mass of IVER
 
 % Gravity IVER
@@ -50,11 +48,11 @@ ylabel('X Position (m)')
 title('Beluga Step Response: X Position vs. Time')
 
 % Simulate with time
-for i=1:numel(simOut)
-   figure(2)
-   scatter3(y(i,7),y(i,8),y(i,9))
-   hold on;
-   plot3(y(1:i,7),y(1:i,8),y(1:i,9));
-   hold off;
-   pause(0.001)
-end
+% for i=1:numel(simOut)
+%    figure(2)
+%    scatter3(y(i,7),y(i,8),y(i,9))
+%    hold on;
+%    plot3(y(1:i,7),y(1:i,8),y(1:i,9));
+%    hold off;
+%    pause(0.001)
+% end
