@@ -35,17 +35,17 @@ u = [ones(numel(t),1), ones(numel(t),1), ones(numel(t),1), ones(numel(t),1)];
 
 % Plot
 figure(1)
-subplot(2,1,1)
+%subplot(2,1,1)
 plot(simOut, y(:,1))
 xlabel('Time (s)')
 ylabel('X Velocity (m/s)')
-title('Beluga Step Response: X Velocity vs. Time')
+title('Beluga Step Response: 0.75')
 
-subplot(2,1,2)
-plot(simOut, y(:,7))
-xlabel('Time (s)')
-ylabel('X Position (m)')
-title('Beluga Step Response: X Position vs. Time')
+%subplot(2,1,2)
+%plot(simOut, y(:,7))
+%xlabel('Time (s)')
+%ylabel('X Position (m)')
+%title('Beluga Step Response: X Position vs. Time')
 
 % Simulate with time
 % for i=1:numel(simOut)
