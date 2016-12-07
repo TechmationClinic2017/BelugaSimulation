@@ -1,5 +1,5 @@
 % Beluga parameters
-m = 4.2173; % mass of IVER
+m = 16.7/2.2; %4.2173; % mass of IVER
 
 % Gravity IVER
 xg = 0; 
@@ -34,12 +34,14 @@ u = [ones(numel(t),1), ones(numel(t),1), ones(numel(t),1), ones(numel(t),1)];
 
 
 % Plot
-figure(1)
+figure(4)
 %subplot(2,1,1)
+hold on
 plot(simOut, y(:,1))
+clear title xlabel ylabel
 xlabel('Time (s)')
 ylabel('X Velocity (m/s)')
-title('Beluga Step Response: 0.75')
+title('Beluga Step Response: 1.0')
 
 %subplot(2,1,2)
 %plot(simOut, y(:,7))
