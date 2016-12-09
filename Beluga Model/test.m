@@ -1,4 +1,4 @@
-inputs = [1 1 1 1]   
+inputs = 0.75*[1 1 1 1]   
     %% Constants TODO
     
     %% Thruster Model
@@ -42,18 +42,18 @@ inputs = [1 1 1 1]
 %     theta = state(11);
 %     psi = state(12);
 %     
-%     %approximate dynamic thrust
-%     d = 0.076; %m
-%     rho = 1000; %kg/m^3
-%     for i = 1:numel(inputs)
-%         if inputs(i)==0
-%             inputs(i) = 0.0001;
-%         end
-%         n = sqrt(abs(inputs(i))/(rho*d^4*0.1858));
-%         Kt = 0.1858*(1-(u/(n*d)));
-%         Kt(isnan(Kt))=0;
-%         inputs(i) = real(Kt*rho*n.^2*d^4);
-%     end
+    %approximate dynamic thrust
+    d = 0.076; %m
+    rho = 1000; %kg/m^3
+    for i = 1:numel(inputs)
+        if inputs(i)==0
+            inputs(i) = 0.0001;
+        end
+        n = sqrt(abs(inputs(i))/(rho*d^4*0.1858));
+        Kt = 0.1858*(1-(u/(n*d)));
+        Kt(isnan(Kt))=0;
+        inputs(i) = real(Kt*rho*n.^2*d^4);
+    end
     
     % Control Forces
     X_c = sum(inputs); 
