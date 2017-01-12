@@ -1,6 +1,6 @@
 %% Draws the surface vehicle
 
-function surface_vehicle_draw(states, i,Ts,max_lim)
+function beluga_draw(states, i,Ts,max_lim)
     % Velocity and theta values
     vel   = sqrt(states(:,4).^2 + states(:,5).^2);
     theta = states(:,3);

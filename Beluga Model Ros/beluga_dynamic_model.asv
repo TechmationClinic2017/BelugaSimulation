@@ -29,12 +29,12 @@ phi     = state(4);
 theta   = state(5);
 psi     = state(6);
 
-x_dot   = state(1);
-y_dot   = state(2);
-z_dot   = state(3);
-phi_dot = state(4);
-theta_dot = state(5);
-psi_dot = state(6);
+x_dot       = state(1);
+y_dot       = state(2);
+z_dot       = state(3);
+phi_dot     = state(4);
+theta   = state(5);
+psi     = state(6);
 
 
 

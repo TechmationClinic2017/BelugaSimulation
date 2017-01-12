@@ -14,10 +14,10 @@ Tend = 60;   % run simulation for Tend seconds. must be multiple of 3
 Ts = 0.01; % Control loop at 100 Hz
 state = [0 0 0 0 0 0 ...
          0 0 0 0 0 0 ...
-         0 0 ]; 
+         0 0 0 0]; 
 % state = [x, y, z, phi, theta, psi, 
 %          x_dot, y_dot, z_dot, phi_dot, theta_dot, psi_dot,
-%          u(1), u(2)];
+%          u(1), u(2), u(3), u(4)];
 
 N = Tend/Ts; % number of cycles
 time = linspace(0,Tend,N);
