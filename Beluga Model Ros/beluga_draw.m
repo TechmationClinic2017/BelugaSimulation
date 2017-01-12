@@ -1,6 +1,6 @@
 %% Draws the surface vehicle
 
-function surface_vehicle_draw(states, states_est, i,Ts,max_lim)
+function surface_vehicle_draw(states, i,Ts,max_lim)
     % Velocity and theta values
     vel   = sqrt(states(:,4).^2 + states(:,5).^2);
     theta = states(:,3);
@@ -10,16 +10,15 @@ function surface_vehicle_draw(states, states_est, i,Ts,max_lim)
     max_lim = max(max_lim, max_lim2)*1.2;
     
     % Plot the track
-    plot(states(1:i,1),states(1:i,2),'-'); hold on;
-    plot(states_est(1:i,1),states_est(1:i,2),'g');
+    plot3(states(1:i,1),states(1:i,2),states(1:i,3),'-'); hold on;
     xlim([-max_lim max_lim]);
     ylim([-max_lim max_lim]);
     hold on;
     
     % Draw the robot
-    plot(states(i,1),states(i,2),'ko');
-    plot([states(i,1), states(i,1)+0.1*max_lim*cos(states(i,3))],...
-         [states(i,2), states(i,2)+0.1*max_lim*sin(states(i,3))],'k','LineWidth',3);
+    plot3(states(i,1),states(i,2),states(i,3),'ko');
+    plot([states(i,1), states(i,1)+0.1*max_lim*cos(states(i,4))],...
+         [states(i,2), states(i,2)+0.1*max_lim*sin(states(i,4))],'k','LineWidth',3); %TODO project into 3D
     hold off;
     
     % Draw the title and labels

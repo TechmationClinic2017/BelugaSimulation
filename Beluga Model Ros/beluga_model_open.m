@@ -11,38 +11,23 @@ close all
 animationspeed = 4; % 4 gives approximately real time
 Tend = 60;   % run simulation for Tend seconds. must be multiple of 3
 
-Ts = 0.01; % Control loop at 100Hz
-state = [0 0 0 ...
-         0 0 0 ...
-         0 0 ...
-         0 0 0]; 
-% state = [x, y, theta, x_dot, y_dot, theta_dot, 
-%          u(1), u(2), disturbance(1), disturbance(2), disturbance(3)];
-
-state = state;
+Ts = 0.01; % Control loop at 100 Hz
+state = [0 0 0 0 0 0 ...
+         0 0 0 0 0 0 ...
+         0 0 ]; 
+% state = [x, y, z, phi, theta, psi, 
+%          x_dot, y_dot, z_dot, phi_dot, theta_dot, psi_dot,
+%          u(1), u(2)];
 
 N = Tend/Ts; % number of cycles
 time = linspace(0,Tend,N);
 
 % initialize states, control and disturbances inputs to zero
 states = zeros(N, length(state));
-states_est = zeros(N, length(state));
-u = zeros(N,2);
-disturbance = zeros(N,3);
+u = ones(N,4);
+disturbance = zeros(N,6);
 %disturbance(:,3) = 9*ones(N,1);
 disturbance = 1*(rand([N 3])-0.5);
-
-% PID controller
-integral1   = 0;
-differentiator1 = 0;
-prev_error1 = 0;
-
-integral2   = 0;
-differentiator2 = 0;
-prev_error2 = 0;
-
-prev_pid = [integral1 differentiator1 prev_error1;
-            integral2 differentiator2 prev_error2];
 
 % set points
 %theta_desired = sin([1:N]/100)*pi/2+2;
@@ -58,27 +43,13 @@ figure(1);
 
 %% Main loop
 for i=1:N
-    %% Point tracking controller
-    scatter(pos_des(point_num,1),pos_des(point_num,2)); hold on;
-    [vel_desired(i), theta_desired(i)] = point_tracking_controller(state, pos_des(point_num,1), pos_des(point_num,2), pos_des(point_num, 3));
-    % next point if close
-    goal_rad = 0.2;
-    if((sqrt((state(1)-pos_des(point_num,1)).^2+(state(2)-pos_des(point_num,2)).^2) < goal_rad) && (point_num < (numel(pos_des)/3)+1))
-        point_num = point_num+1;
-    end
-    if(point_num > (numel(pos_des)/3))
-        break;
-    end
-
-    %% Velocity Controller
-    [u(i, :), prev_pid] = vel_controller(state, vel_desired(i), theta_desired(i), Ts, prev_pid);
-
+    
     %% Run model.
-    state = surface_vehicle_dynamic_model(state,u(i,:),disturbance(i,:),Ts);
+    state = beluga_dynamic_model(state,u(i,:),disturbance(i,:),Ts);
     states(i,:) = state;
     
     if mod(i,animationspeed) == 1
-        surface_vehicle_draw(states,states,i,Ts,1);
+        beluga_draw(states,i,Ts,1);
         drawnow;
     end
 end
@@ -151,6 +122,6 @@ xlabel('time (s)');
 
 %for i=1:4:N
 %figure(2);
-%surface_vehicle_draw(states,i,Ts,max_lim);
+%beluga_draw(states,i,Ts,max_lim);
 %drawnow;
 %end
