@@ -13,12 +13,14 @@ for i = 1:size(tests,1)
 end
 
 function [tau, yss] = analyzeStep(t,v)
-    vd = diff(v);
-    lnV = log(diff(v));
+    tStep = mean(diff(t));
+    vd = diff(v)/tStep;
+    lnV = log(vd);
     t= t(2:end);
     p = polyfit(t, lnV, 1);
+    p = max(diff(lnV))/tStep;
     tau = -1/(p(1))
-    yss = tau*vd(end)
+    yss = tau*vd(1)
     figure
     plot(t,lnV)
 end
