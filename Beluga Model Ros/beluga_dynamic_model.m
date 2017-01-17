@@ -10,16 +10,39 @@ function newstate = beluga_dynamic_model( state, u, disturbance, Ts )
 integration_steps = 5; %increase this number if you find the 
                        %simulator go into numerical instability
 
-%% CONSTANTS TODO UPDATE
-m = 1; % mass 1kg
-I = 1;
-k1 = 10; % 1/2*p*Cd*A; drag coefficient
-k2 = 5; % rotational drag
-r = 0.050; % thrusters r meters from the center of mass axis
-a = 0.050; % center of drag a meters from center of mass along axis
-max_thrust = 500; % Newtons
+%% CONSTANTS
+m = 4.2173; % mass of Beluga
 
+% Gravity Beluga
+xg = 0; 
+zg = 0;
 
+% Moments of Inertia Beluga
+Ix = 0.05;
+Iy = 2.05;
+Iz = 2.06;
+
+X_udot = -0.51334;
+Y_vdot = -23.8314;
+Z_wdot = -23.8314;
+
+Y_rdot = -2.5656;
+Z_qdot = 2.5656;
+
+K_pdot = -0.0704;
+M_wdot = 2.5656;
+
+M_qdot = -3.2455;
+N_vdot = -2.5656;
+
+N_rdot = -3.2455;
+
+mass_matrix = [m-X_udot 0 0 0 m*zg 0;
+               0 m-Y_vdot 0 -m*zg 0 m*xg-Y_rdot; 
+               0 0 m-Z_wdot 0 -m*xg-Z_qdot 0; 
+               0 -m*zg 0 Ix-K_pdot 0 0; 
+               m*zg 0 -m*xg-M_wdot 0 Iy-M_qdot 0; 
+               0 m*xg-N_vdot 0 0 0 Iz-N_rdot];
 
 %% STATE
 x       = state(1);
@@ -29,55 +52,67 @@ phi     = state(4);
 theta   = state(5);
 psi     = state(6);
 
-x_dot   = state(1);
-y_dot   = state(2);
-z_dot   = state(3);
-phi_dot = state(4);
-theta_dot = state(5);
-psi_dot = state(6);
-
-
+x_d   = state(1);
+y_d   = state(2);
+z_d   = state(3);
+phi_d = state(4);
+theta_d = state(5);
+psi_d = state(6);
 
 x_disturbance     = disturbance(1);
 y_disturbance     = disturbance(2);
 theta_disturbance = disturbance(3);
 
-
-
 %% CALCULATE FORCES TODO
 
-Fl = max_thrust*u(1);
-Fr = max_thrust*u(2);
+F = ones(6,1); 
 
+%% COMPUTE NEW STATE
 
+% Convert forces into accelerations
+accel = (mass_matrix)\F;
+state_d = [state(1:6), accel'];
 
-%% INTEGRATE??? TODO
+newstate = state(1:12);
+
 for j=1:integration_steps
     
     Ts_int = Ts/integration_steps;
-    % calculate velocity vector angle and magnitude
-    phi = atan2(y_d, x_d); 
-    vel = sqrt(x_d^2+y_d^2);
-
-    % balance forces and moments
-    x_dd = 1/m*(Fl+Fr)*cos(theta)-k1*vel^2*cos(phi) + x_disturbance;
-    y_dd = 1/m*(Fl+Fr)*sin(theta)-k1*vel^2*sin(phi) + y_disturbance;
-    theta_dd = 1/I* ((Fr-Fl)*r - k1*vel^2*a*sin(theta-phi) - k2*theta_d*abs(theta_d)) ...
-        + theta_disturbance;
 
     % update state variables by integrating
-    x_d = x_d + x_dd*Ts_int;
-    y_d = y_d + y_dd*Ts_int;
-    theta_d = theta_d + theta_dd*Ts_int;
-    x = x + x_d*Ts_int;
-    y = y + y_d*Ts_int;
-    theta = theta + theta_d*Ts_int;
-    
-    theta = mod(theta, 2*pi);
+    newstate = newstate + state_d*Ts_int;
+
 end
 
-newstate = [x, y, theta, x_d, y_d, theta_d,...
-    u(1), u(2), x_disturbance, y_disturbance, theta_disturbance];
+% convert to global frame
+cosphi = cos(phi);
+sinphi = sin(phi);
+costheta = cos(theta);
+sintheta = sin(theta);
+cospsi = cos(psi);
+sinpsi = sin(psi);
+
+R = zeros(6,6);
+R(1,1) = cospsi.*cosphi-costheta.*sinphi.*sinpsi;
+R(1,2) = sinphi.*cospsi+costheta.*cosphi.*sinpsi;
+R(1,3) = sintheta.*sinpsi;
+
+R(2,1) = -cosphi.*sinpsi-costheta.*cospsi.*sinphi;
+R(2,2) = -sinpsi.*sinphi+costheta.*cosphi.*cospsi;
+R(2,3) = sintheta.*cospsi;
+
+R(3,1) = sinphi.*sintheta;
+R(3,2) = -cosphi.*sintheta;
+R(3,3) = costheta;
+
+R(4,4) = 1;
+R(5,5) = 1;
+R(6,6) = 1;
+
+%Rotate to global frame
+newstate = [(R*newstate(1:6)')' newstate(7:12)];
+
+newstate = [newstate, u(1), u(2), u(3), u(4)];
 
 end
 
