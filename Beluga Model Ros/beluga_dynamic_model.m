@@ -7,7 +7,7 @@ function newstate = beluga_dynamic_model( state, u, disturbance, Ts )
 %                   | H | -> new state
 % control inputs -> |___|
 
-integration_steps = 5; %increase this number if you find the 
+integration_steps = 50; %increase this number if you find the 
                        %simulator go into numerical instability
 
 %% CONSTANTS
@@ -52,12 +52,12 @@ phi     = state(4);
 theta   = state(5);
 psi     = state(6);
 
-x_d   = state(1);
-y_d   = state(2);
-z_d   = state(3);
-phi_d = state(4);
-theta_d = state(5);
-psi_d = state(6);
+x_d   = state(7);
+y_d   = state(8);
+z_d   = state(9);
+phi_d = state(10);
+theta_d = state(11);
+psi_d = state(12);
 
 x_disturbance     = disturbance(1);
 y_disturbance     = disturbance(2);
@@ -75,10 +75,10 @@ state_d = [state(7:12), accel'];
 
 newstate = state(1:12);
 
+Ts_int = Ts/integration_steps;
+
 for j=1:integration_steps
     
-    Ts_int = Ts/integration_steps;
-
     % update state variables by integrating
     newstate = newstate + state_d*Ts_int;
 

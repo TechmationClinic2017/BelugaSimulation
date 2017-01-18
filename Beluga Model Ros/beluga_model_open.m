@@ -93,7 +93,7 @@ figure(3);
 subplot(3,1,1);
 theta = states(:,3);
 plot(time, theta); hold on;
-plot(time, theta_desired,'--','LineWidth',2); hold off;
+ hold off;
 legend('theta dot (rad/s)');
 title('PID Controller performance');
 
