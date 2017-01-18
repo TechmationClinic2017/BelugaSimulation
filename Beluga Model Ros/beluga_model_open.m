@@ -9,7 +9,7 @@
 clear all
 close all
 animationspeed = 4; % 4 gives approximately real time
-Tend = 60;   % run simulation for Tend seconds. must be multiple of 3
+Tend = 6;   % run simulation for Tend seconds. must be multiple of 3
 
 Ts = 0.01; % Control loop at 100 Hz
 state = [0 0 0 0 0 0 ...
@@ -73,8 +73,8 @@ subplot(5,1,3);
 plot(time, states(:,1)); hold on;
 plot(time, states(:,2)); 
 plot(time, states(:,3)); 
-plot(time, theta_desired,'--'); hold off;
-legend({'x','y','theta', 'theta desired'});
+hold off;
+legend({'x','y','z'});
 
 subplot(5,1,4);
 plot(time, states(:,4)); hold on;

@@ -65,13 +65,13 @@ theta_disturbance = disturbance(3);
 
 %% CALCULATE FORCES TODO
 
-F = ones(6,1); 
+F = 100*ones(6,1); 
 
 %% COMPUTE NEW STATE
 
 % Convert forces into accelerations
 accel = (mass_matrix)\F;
-state_d = [state(1:6), accel'];
+state_d = [state(7:12), accel'];
 
 newstate = state(1:12);
 
