@@ -15,8 +15,8 @@ Ts = 0.01; % Control loop at 100 Hz
 state = [0 0 0 0 0 0 ...
          0 0 0 0 0 0 ...
          0 0 0 0]; 
-% state = [x, y, z, phi, theta, psi, 
-%          x_dot, y_dot, z_dot, phi_dot, theta_dot, psi_dot,
+% state = [x_dot, y_dot, z_dot, phi_dot, theta_dot, psi_dot,
+%          x, y, z, phi, theta, psi, 
 %          u(1), u(2), u(3), u(4)];
 
 N = Tend/Ts; % number of cycles
@@ -58,70 +58,37 @@ end
 figure(2);
 
 subplot(5,1,1);
-plot(time, states(:,7)); hold on;
-plot(time, states(:,8)); hold off;
+plot(time, states(:,13)); hold on;
+plot(time, states(:,14)); hold on;
+plot(time, states(:,15)); hold on;
+plot(time, states(:,16)); hold off;
 legend({'left motor','right motor'});
-title('Robot state');
+title('Robot Thrust');
 
 subplot(5,1,2);
-plot(time, states(:,9)); hold on;
-plot(time, states(:,10)); hold on;
-plot(time, states(:, 11)); hold off;
-legend({'x disturbance','y disturbance', 'theta disturbance'});
+plot(time, states(:,1)); hold on;
+plot(time, states(:,2)); hold on;
+plot(time, states(:, 3)); hold off;
+legend({'u','v', 'w'});
 
 subplot(5,1,3);
-plot(time, states(:,1)); hold on;
-plot(time, states(:,2)); 
-plot(time, states(:,3)); 
+plot(time, states(:,4)); hold on;
+plot(time, states(:,5)); 
+plot(time, states(:,6)); 
 hold off;
-legend({'x','y','z'});
+legend({'p','q','r'});
 
 subplot(5,1,4);
-plot(time, states(:,4)); hold on;
-plot(time, states(:,5)); hold on;
-plot(time, states(:,6)); hold off;
-legend({'x_d','y_d','theta_d'});
+plot(time, states(:,7)); hold on;
+plot(time, states(:,8)); hold on;
+plot(time, states(:,9)); hold off;
+legend({'x','y','z'});
 
 subplot(5,1,5);
-plot(time, pid_save(:,1)); hold on;
-plot(time, pid_save(:,2)); hold on;
-plot(time, pid_save(:,3)); hold off;
+plot(time, states(:,10)); hold on;
+plot(time, states(:,11)); hold on;
+plot(time, states(:,12)); hold off;
 ylim([-3 3]);
-legend('error','integrator','differentiator');
-
-figure(3);
-subplot(3,1,1);
-theta = states(:,3);
-plot(time, theta); hold on;
- hold off;
-legend('theta dot (rad/s)');
-title('PID Controller performance');
-
-subplot(3,1,2);
-vel = sqrt(states(:,4).^2 + states(:,5).^2);
-plot(time, vel); hold on;
-plot(time, vel_desired,'--','LineWidth',2); hold off;
-legend('speed (m/s)');
-
-subplot(3,1,3);
-plot(time, states(:,7)); hold on;
-plot(time, states(:,8)); hold off;
-legend({'left motor','right motor'});
+legend('\phi','\theta','\psi');
 
 xlabel('time (s)');
-
-
-
-%% Animate
-
-%max_lim = max(abs([states(:,1); states(:,2)]));
-%if ~max_lim
-%    max_lim = 1;
-%end
-%max_lim = max_lim*1.2;
-
-%for i=1:4:N
-%figure(2);
-%beluga_draw(states,i,Ts,max_lim);
-%drawnow;
-%end
