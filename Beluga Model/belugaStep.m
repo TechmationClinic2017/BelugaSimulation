@@ -1,13 +1,13 @@
 % Beluga parameters
 
 
-m = 4.2173; % mass of IVER
+m = 4.2173; % mass of Beluga (kg?)
 
-% Gravity IVER
+% Gravity Beluga
 xg = 0; 
 zg = 0;
 
-% Moments of Inertia IVER
+% Moments of Inertia Beluga
 Ix = 0.05;
 Iy = 2.05;
 Iz = 2.06;
