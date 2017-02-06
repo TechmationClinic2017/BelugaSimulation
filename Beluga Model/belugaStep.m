@@ -32,7 +32,7 @@ numSteps = 100;
 timeStep = 0.1;
 t = (timeStep*(0:numSteps))';
 u = [ones(numel(t),1), ones(numel(t),1), ones(numel(t),1), ones(numel(t),1)];
-[simOut, y] = sim('beluga_control.slx');
+[simOut, y] = sim('beluga_control_a.slx');
 
 
 % Plot
