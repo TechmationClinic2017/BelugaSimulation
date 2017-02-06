@@ -1,5 +1,4 @@
-function F = test(state, inputs)
-    
+inputs = 0.75*[1 1 1 1]   
     %% Constants TODO
     
     %% Thruster Model
@@ -27,27 +26,30 @@ function F = test(state, inputs)
     end
 
 
-    %% States and calculations
-    % defining states
-    u = state(1);
-    v = state(2);
-    w = state(3);
-    p = state(4);
-    q = state(5);
-    r = state(6);
-    
-    x = state(7);
-    y = state(8);
-    z = state(9);
-    phi = state(10);
-    theta = state(11);
-    psi = state(12);
-    
+%     %% States and calculations
+%     % defining states
+%     u = state(1);
+%     v = state(2);
+%     w = state(3);
+%     p = state(4);
+%     q = state(5);
+%     r = state(6);
+%     
+%     x = state(7);
+%     y = state(8);
+%     z = state(9);
+%     phi = state(10);
+%     theta = state(11);
+%     psi = state(12);
+%     
     %approximate dynamic thrust
     d = 0.076; %m
     rho = 1000; %kg/m^3
     for i = 1:numel(inputs)
-        n = sqrt((inputs(i)/(rho*d^4*0.1858)));
+        if inputs(i)==0
+            inputs(i) = 0.0001;
+        end
+        n = sqrt(abs(inputs(i))/(rho*d^4*0.1858));
         Kt = 0.1858*(1-(u/(n*d)));
         Kt(isnan(Kt))=0;
         inputs(i) = real(Kt*rho*n.^2*d^4);
@@ -70,4 +72,3 @@ function F = test(state, inputs)
     N = N_c;
     F = [X Y Z K M N]'; 
     %F = [0 0 0 0 0 0]';
-end
