@@ -12,13 +12,3 @@ for i = 1:size(tests,1)
 %    ylabel('Forward Velocity (m/s)')
 end
 
-function [tau, yss] = analyzeStep(t,v)
-    vd = diff(v);
-    lnV = log(diff(v));
-    t= t(2:end);
-    p = polyfit(t, lnV, 1);
-    tau = -1/(p(1))
-    yss = tau*vd(end)
-    figure
-    plot(t,lnV)
-end
