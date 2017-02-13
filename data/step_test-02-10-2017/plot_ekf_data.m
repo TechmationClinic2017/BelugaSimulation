@@ -14,7 +14,6 @@ vy = v(:,2);
 vz = v(:,3);
 
 s = sqrt(vx.^2+vy.^2+vz.^2);
-s_2d = sqrt(vx.^2+vy.^2);
 
 in_raw = importdata(input_filename);
 if ~all(size(in_raw.data) == [2,2])
@@ -31,9 +30,16 @@ t_step = t(ind);
 t0 = t_step(1);
 t_step = t_step - t0;
 
-s_2d_step = s_2d(ind);
-s0 = s_2d_step(1);
-s_2d_step = s_2d_step - s0;
+
+vx_step = vx(ind);
+vx_step = vx_step - vx_step(1);
+vy_step = vy(ind);
+vy_step = vy_step - vy_step(1);
+vz_step = vz(ind);
+vz_step = vz_step - vz_step(1);
+
+s_2d_step = sqrt(vx_step.^2 + vy_step.^2);
+s_step = sqrt(vx_step.^2 + vy_step.^2 + vz_step.^2);
 
 figure
 plot(t_step,s_2d_step)
