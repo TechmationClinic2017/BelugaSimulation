@@ -31,7 +31,11 @@ f_control = [   K*rho*d^4/(m-X_udot)*(n1^2-x1*n1/d+n2^2-x1*n2/d+n3^2-x1*n3/d+n4^
                 0;
                 0;
                 0];
-                       
+ 
+            
+            
+f_state = [f_state(1) f_state(5)];
+f_control = [f_control(1) f_control(5)];
 % Now compute jacobian
-dfdx = jacobian(f_state, [x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12]);
-dfdu = jacobian(f_control, [n1; n2; n3; n4]);
+dfdx = jacobian(f_state, [x1, x5])
+dfdu = jacobian(f_control, [n1; n2; n3; n4])
