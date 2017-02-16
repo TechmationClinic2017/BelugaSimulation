@@ -1,4 +1,5 @@
-inputs = 0.75*[1 1 1 1]   
+state = zeros(1,12);
+inputs = 0.75*[1 1 1 1]   ;
     %% Constants TODO
     
     %% Thruster Model
@@ -8,8 +9,8 @@ inputs = 0.75*[1 1 1 1]
     
     
     % From Arduino implementation
-    DEAD_POS = 16;
-    DEAD_NEG = -35;
+    DEAD_POS = 25;%16;
+    DEAD_NEG = 25;%-35;
     PERIOD = 500; % [ms]
     LEAK_THRESH = 150;
     
@@ -27,20 +28,20 @@ inputs = 0.75*[1 1 1 1]
 
 
 %     %% States and calculations
-%     % defining states
-%     u = state(1);
-%     v = state(2);
-%     w = state(3);
-%     p = state(4);
-%     q = state(5);
-%     r = state(6);
-%     
-%     x = state(7);
-%     y = state(8);
-%     z = state(9);
-%     phi = state(10);
-%     theta = state(11);
-%     psi = state(12);
+    % defining states
+    u = state(1);
+    v = state(2);
+    w = state(3);
+    p = state(4);
+    q = state(5);
+    r = state(6);
+    
+    x = state(7);
+    y = state(8);
+    z = state(9);
+    phi = state(10);
+    theta = state(11);
+    psi = state(12);
 %     
     %approximate dynamic thrust
     d = 0.076; %m

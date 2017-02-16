@@ -1,4 +1,4 @@
-function plot_ekf_data( data_filename, input_filename)
+function[t_step, s_2d_step]= plot_ekf_data( data_filename, input_filename)
 
 split_filename = regexp(input_filename,'\.','split');
 file_prefix = split_filename(1);

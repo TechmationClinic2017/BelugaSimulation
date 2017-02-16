@@ -9,7 +9,7 @@ for match = matches
     if ~isempty(token)
         matlab_cells_are_dumb = token{1};
         prefix = matlab_cells_are_dumb{1};
-        plot_ekf_data([prefix '_ekf.dat'], [prefix '_input.dat'])
+        [t,y] = plot_ekf_data([prefix '_ekf.dat'], [prefix '_input.dat']);
     end
 end
         
