@@ -1,11 +1,28 @@
 % Load Data
 load('forward050_2017-02-10-08-29-38_vel.mat');
+u = 25;
 
 % compute linear velocity
 v_lin = sqrt(vx_step.^2+vy_step.^2);
 
+% Compute first derivative
+dv = diff(v_lin);
+dt = t_step(1:end-1)+0.5*diff(t_step);
+
+% Compute second derivative
+d2v = diff(dv);
+dt2 = dt(1:end-1)+0.5*diff(dt);
+
+% Plot all 3
+plot(t_step, v_lin, dt, dv, dt2, d2v);
+xlabel('Time (s)');
+ylabel('Linear Velocity (m/s)');
+title('Step Response (u=0.5)');
+
+
 % Compute steady-state velocity
 % assume the system is underdamped and any "overshoot" is due to IMU drift
+% TODO FIX
 vss = max(v_lin);
 
 % determine inflection point of rise

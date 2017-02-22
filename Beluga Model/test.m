@@ -1,5 +1,5 @@
 state = zeros(1,12);
-inputs = -0.25*[1 1 1 1]   ;
+inputs = -0.5*[1 1 1 1]   ;
     %% Constants TODO
     
     %% Thruster Model
