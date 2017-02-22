@@ -1,5 +1,5 @@
 state = zeros(1,12);
-inputs = 0.75*[1 1 1 1]   ;
+inputs = -0.25*[1 1 1 1]   ;
     %% Constants TODO
     
     %% Thruster Model
@@ -9,17 +9,17 @@ inputs = 0.75*[1 1 1 1]   ;
     
     
     % From Arduino implementation
-    DEAD_POS = 25;%16;
-    DEAD_NEG = 25;%-35;
+    DEAD_POS = 16;
+    DEAD_NEG = -35;
     PERIOD = 500; % [ms]
     LEAK_THRESH = 150;
     
     %Correct for deadzone
     for i = 1:numel(inputs)
         if inputs(i) > 0
-            inputs(i) = inputs(i)*50+DEAD_POS;
+            inputs(i) = inputs(i)*100+DEAD_POS;
         elseif inputs(i) < 0
-            inputs(i) = inputs(i)*50+DEAD_NEG;            
+            inputs(i) = inputs(i)*100+DEAD_NEG;            
         end
         
         inputs(i) = inputs(i) + 1500;
