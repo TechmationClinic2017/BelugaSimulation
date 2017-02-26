@@ -1,7 +1,5 @@
 % Beluga parameters
-
-
-m = 4.2173; % mass of IVER
+m = 16.7/2.2; %4.2173; % mass of IVER
 
 % Gravity IVER
 xg = 0; 
@@ -36,25 +34,27 @@ u = [ones(numel(t),1), ones(numel(t),1), ones(numel(t),1), ones(numel(t),1)];
 
 
 % Plot
-figure(1)
-subplot(2,1,1)
+figure(4)
+%subplot(2,1,1)
+hold on
 plot(simOut, y(:,1))
+clear title xlabel ylabel
 xlabel('Time (s)')
 ylabel('X Velocity (m/s)')
-title('Beluga Step Response: X Velocity vs. Time')
+title('Beluga Step Response: 1.0')
 
-subplot(2,1,2)
-plot(simOut, y(:,7))
-xlabel('Time (s)')
-ylabel('X Position (m)')
-title('Beluga Step Response: X Position vs. Time')
+%subplot(2,1,2)
+%plot(simOut, y(:,7))
+%xlabel('Time (s)')
+%ylabel('X Position (m)')
+%title('Beluga Step Response: X Position vs. Time')
 
 % Simulate with time
-for i=1:numel(simOut)
-   figure(2)
-   scatter3(y(i,7),y(i,8),y(i,9))
-   hold on;
-   plot3(y(1:i,7),y(1:i,8),y(1:i,9));
-   hold off;
-   pause(0.001)
-end
+% for i=1:numel(simOut)
+%    figure(2)
+%    scatter3(y(i,7),y(i,8),y(i,9))
+%    hold on;
+%    plot3(y(1:i,7),y(1:i,8),y(1:i,9));
+%    hold off;
+%    pause(0.001)
+% end

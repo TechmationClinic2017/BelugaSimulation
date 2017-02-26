@@ -1,5 +1,5 @@
-function F = test(state, inputs)
-    
+state = zeros(1,12);
+inputs = -0.5*[1 1 1 1]   ;
     %% Constants TODO
     
     %% Thruster Model
@@ -17,9 +17,9 @@ function F = test(state, inputs)
     %Correct for deadzone
     for i = 1:numel(inputs)
         if inputs(i) > 0
-            inputs(i) = inputs(i)*50+DEAD_POS;
+            inputs(i) = inputs(i)*100+DEAD_POS;
         elseif inputs(i) < 0
-            inputs(i) = inputs(i)*50+DEAD_NEG;            
+            inputs(i) = inputs(i)*100+DEAD_NEG;            
         end
         
         inputs(i) = inputs(i) + 1500;
@@ -27,7 +27,7 @@ function F = test(state, inputs)
     end
 
 
-    %% States and calculations
+%     %% States and calculations
     % defining states
     u = state(1);
     v = state(2);
@@ -42,12 +42,15 @@ function F = test(state, inputs)
     phi = state(10);
     theta = state(11);
     psi = state(12);
-    
+%     
     %approximate dynamic thrust
     d = 0.076; %m
     rho = 1000; %kg/m^3
     for i = 1:numel(inputs)
-        n = sqrt((inputs(i)/(rho*d^4*0.1858)));
+        if inputs(i)==0
+            inputs(i) = 0.0001;
+        end
+        n = sqrt(abs(inputs(i))/(rho*d^4*0.1858));
         Kt = 0.1858*(1-(u/(n*d)));
         Kt(isnan(Kt))=0;
         inputs(i) = real(Kt*rho*n.^2*d^4);
@@ -70,4 +73,3 @@ function F = test(state, inputs)
     N = N_c;
     F = [X Y Z K M N]'; 
     %F = [0 0 0 0 0 0]';
-end
