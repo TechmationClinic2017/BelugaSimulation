@@ -1,13 +1,13 @@
 % Beluga parameters
 
 
-m = 4.2173; % mass of IVER
+m = 4.2173; % mass of Beluga (units?)
 
-% Gravity IVER
+% Gravity Beluga
 xg = 0; 
 zg = 0;
 
-% Moments of Inertia IVER
+% Moments of Inertia Beluga
 Ix = 0.05;
 Iy = 2.05;
 Iz = 2.06;
@@ -32,7 +32,7 @@ numSteps = 100;
 timeStep = 0.1;
 t = (timeStep*(0:numSteps))';
 u = [ones(numel(t),1), ones(numel(t),1), ones(numel(t),1), ones(numel(t),1)];
-[simOut, y] = sim('beluga_control.slx');
+[simOut, y] = sim('beluga_control_a.slx');
 
 
 % Plot
