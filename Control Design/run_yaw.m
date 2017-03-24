@@ -6,8 +6,8 @@ tdyaw = 0.11;
 B = 0.55;
 
 % set PID constants
-Kp = 0.74;
-Kd = 1.7;
+Kp = 2.17;
+Kd = 3.47;
 
 % setpoint
 r_set = pi/2;
@@ -17,7 +17,7 @@ r_set = pi/2;
 
 %Plot stuff
 ref = ones(size(simout,1),1)*r_set;
-plot(simout, z, simout, ref)
+plot(simout, z, simout, ref)    
 xlabel('Time (s)');
 ylabel('Angle (rads)');
 title('Yaw Control(\pi/2)');
