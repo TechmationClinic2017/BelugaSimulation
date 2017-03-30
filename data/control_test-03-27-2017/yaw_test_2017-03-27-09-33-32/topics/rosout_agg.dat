@@ -1,0 +1,5 @@
+%time,field.header.seq,field.header.stamp,field.header.frame_id,field.level,field.name,field.msg,field.file,field.function,field.line,field.topics0
+1490632415044734161,1215,1490632415044500284,,2,/record_1490632412009352918,Subscribing to /beluga/control_inputs/top,/tmp/binarydeb/ros-indigo-rosbag-1.11.19/src/recorder.cpp,shared_ptr<ros::Subscriber> rosbag::Recorder::subscribe,209,/rosout
+1490632415047438137,1216,1490632415047204670,,2,/record_1490632412009352918,Subscribing to /beluga/control_inputs/bottom,/tmp/binarydeb/ros-indigo-rosbag-1.11.19/src/recorder.cpp,shared_ptr<ros::Subscriber> rosbag::Recorder::subscribe,209,/rosout
+1490632415049970030,1217,1490632415049771131,,2,/record_1490632412009352918,Subscribing to /beluga/control_inputs/left,/tmp/binarydeb/ros-indigo-rosbag-1.11.19/src/recorder.cpp,shared_ptr<ros::Subscriber> rosbag::Recorder::subscribe,209,/rosout
+1490632415052442866,1218,1490632415052224757,,2,/record_1490632412009352918,Subscribing to /beluga/control_inputs/right,/tmp/binarydeb/ros-indigo-rosbag-1.11.19/src/recorder.cpp,shared_ptr<ros::Subscriber> rosbag::Recorder::subscribe,209,/rosout
