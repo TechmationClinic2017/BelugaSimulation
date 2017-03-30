@@ -1,0 +1,18 @@
+% set system constants
+tdyaw = 0.11;
+B = 0.55;
+
+% set PID constants
+Kp = 0.74;
+Kd = 1.7;
+
+% setpoint
+r_set = pi/2;
+
+%run simulation
+[simout, y] = sim('beluga1_model_yaw.slx');
+
+%Plot stuff
+ref = ones(size(simout,1),1)*r_set;
+plot(simout, y(:,1), simout, ref)
+xlabel('Time;
