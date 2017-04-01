@@ -2,6 +2,9 @@ import sys, os, re
 from subprocess import Popen, PIPE
 import numpy as np
 import tf
+
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 def process_bagfile(bagfile, debug=True):
