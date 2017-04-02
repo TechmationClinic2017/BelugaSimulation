@@ -1,4 +1,7 @@
 function [constants] = PIDmarginDesign(A, tau, td, w_co, phi_m, PoleRatio, step)
+%Chris Kotcherha
+%HMC Class of 2018 - Engineering
+%
 %outputs PID constants in the form [Kp Ki Kd T1 T2].
 %Takes in 1st order process TF, phase margin, crossover frequency, and pole ratio
 %specifications.

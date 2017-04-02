@@ -1,6 +1,11 @@
 function [constants] = PImarginDesign(A, tau, td, w_co, phi_m, step)
+%Chris Kotcherha
+%HMC Class of 2018 - Engineering
+%
 %outputs PI constants in the form [Kp Ki].
-%Takes in 1st order process TF, phase margin, and crossover frequency specifications
+%Takes in 1st order process TF, phase margin, and crossover frequency
+%specifications.
+%Assumes 1st order process (with delay) with PID controller in closed loop
 
 %ex:
 %PImarginDesign(1.06, 1.75, .09,5, 60,1)
