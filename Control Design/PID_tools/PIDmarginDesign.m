@@ -2,14 +2,14 @@ function [constants] = PIDmarginDesign(A, tau, td, w_co, phi_m, PoleRatio, step,
 %Chris Kotcherha
 %HMC Class of 2018 - Engineering
 %
-%outputs PID constants in the form [Kp Ki Kd].
+%outputs continuous PID constants in the form [Kp Ki Kd].
 %Takes in 1st order process TF, phase margin, crossover frequency, and pole ratio
 %specifications.
 %Assumes 1st order process (with delay) with PID controller in closed loop
-
+%
 %ex:
 %PIDmarginDesign(1.06, 1.75, .09,5, 70, 10,1,1,10)
-
+%
 %Input:
 % A: process magnitude - openloop
 % tau: (s) process time constant - openloop
@@ -20,7 +20,6 @@ function [constants] = PIDmarginDesign(A, tau, td, w_co, phi_m, PoleRatio, step,
 %step: if 1, plot closed loop step response using constants
 %CtoD: Convert from Continuous to discrete?
 %sfreq: Sampling time for c2d (Hz)
-
 Ts = 1/fs;
 w = w_co;
 pm = phi_m/(180/pi); %phase margin (rads)
@@ -45,7 +44,7 @@ Kd = double(Kd);
 
 constants = [Kp Ki Kd]; %output
 
-%plot closed loop step response
+%closed loop step response
 s = tf('s');
 H = (A*exp(-s*td))/(tau*s + 1); %1st order w/ delay
 C = Kp + Ki/s + Kd*s  %PID Controller
@@ -53,15 +52,16 @@ L = C*H; %feedback TF
 F = C*H; %forward path TF
 Q = (F)/(1+L); %closed loop TF
 
-%Discretize and Plot Closed Loop Step Response
+%Discretize and Plot Closed Loop Step Responses
 if CtoD==1
     Cd = c2d(C,Ts, 'matched') %discretize Controller
     Hd = c2d(H,Ts, 'matched'); %discretize Process
     Ld = Cd*Hd; %discrete feedback TF
     Fd = Cd*Hd; %discrete forward path TF
-    Qd = (Fd)/(1+Ld); %discrete closed loop TF
+    Qd = (Fd)/(1+Ld);
+    %discrete closed loop TF
     if step==1
-        ltiview('step',Q,Qd);%
+        ltiview('step',Q,Qd);%plot continuous and discrete closed loop response
     end
 
 elseif step==1
@@ -69,4 +69,3 @@ elseif step==1
 end
 
 end
-
