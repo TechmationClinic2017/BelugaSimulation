@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys, os, re
 from subprocess import Popen, PIPE
 import numpy as np
@@ -6,6 +7,9 @@ import tf
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+
+class Data():
+    pass
 
 def process_bagfile(bagfile, debug=True):
     
@@ -29,7 +33,7 @@ def process_bagfile(bagfile, debug=True):
 
     # make a new directory to save all of the produced files
     if debug:
-        print "Making directory: ~/{}".format(basename)
+        print "Making directory: ./{}".format(basename)
 
     mkdir_process = Popen(["mkdir", "-p", basename])
     mkdir_process.wait()
@@ -49,7 +53,7 @@ def process_bagfile(bagfile, debug=True):
     mkdir_process = Popen(["mkdir", "-p", topic_dir])
     mkdir_process.wait()
     if debug:
-        print "Processing topics and saving data to ~/{}:".format(topic_dir)
+        print "Processing topics and saving data to ./{}:".format(topic_dir)
 
     for topic in topic_names:
         if debug:
@@ -70,7 +74,7 @@ def process_bagfile(bagfile, debug=True):
     data_dir = basename+"/data/"
     mkdir_process = Popen(["mkdir", "-p", data_dir])
     mkdir_process.wait()
-    print "Extracting data and saving to ~/{}".format(data_dir)
+    print "Extracting data and saving to ./{}".format(data_dir)
 
     # get the test start and end time
     t_0 = float("inf")
@@ -100,8 +104,20 @@ def process_bagfile(bagfile, debug=True):
             control_topic_file = topic_dir + "beluga-control_inputs-" + control_input + ".dat"
             control_data_file = data_dir + control_input +"_input.dat"
             if debug:
-                print "\tSaving {} input data as ~/{}".format(control_input, control_data_file)
+                print "\tSaving {} input data as ./{}".format(control_input, control_data_file)
             saveInputData(control_topic_file, control_data_file, start_time = t_0)
+
+    # save desired state data
+    desired_state_topic = "/beluga/main/desired_state"
+    if desired_state_topic not in topic_names:
+        if debug:
+            print "\tWARNING: No desired state data"
+    else:
+        desired_state_topic_file = topic_dir + "beluga-main-desired_state.dat"
+        desired_state_data_file  = data_dir + "desired_state.dat"
+        if debug:
+            print "\tSaving desired state data as ./{}".format(desired_state_data_file)
+        saveDesiredStateData(desired_state_topic_file, desired_state_data_file, start_time = t_0)
 
     # save ekf data
     ekf_topic = "/beluga/navigation/odometry/filtered"
@@ -112,7 +128,7 @@ def process_bagfile(bagfile, debug=True):
         ekf_topic_file = topic_dir+"/beluga-navigation-odometry-filtered.dat"
         ekf_data_file = data_dir + "ekf.dat"
         if debug:
-            print "\tSaving odometry data as ~/{}".format(ekf_data_file)
+            print "\tSaving odometry data as ./{}".format(ekf_data_file)
         saveEkfData(ekf_topic_file, ekf_data_file, start_time = t_0)
 
     # plot the data and save graphs
@@ -142,6 +158,7 @@ def getInputTime(control_topic_file):
         t_f = control_data[last_ind,0]
     return t_0, t_f
 
+
 def saveInputData(control_topic_file, control_data_file, start_time = 0):
     control_data = np.loadtxt(control_topic_file, delimiter=",", comments="%")
 
@@ -152,6 +169,34 @@ def saveInputData(control_topic_file, control_data_file, start_time = 0):
     header = "Time\tInput"
 
     np.savetxt(control_data_file, control_data, fmt = "%.7f", delimiter = "\t", header = header)
+
+    return
+
+
+def saveDesiredStateData(desired_state_topic_file, desired_state_data_file, start_time = 0):
+    desired_state_data = np.loadtxt(desired_state_topic_file, dtype=str, delimiter=",", comments="%")
+
+    header = "Time\tVelocity\tPitch\tYaw"
+
+    time = desired_state_data[:,0].astype(float)
+    time = (time - start_time)/1e9
+
+    nan = time * float('nan')
+
+    control_vel_bool = (desired_state_data[:,1] != 'false')
+    vel = np.choose(control_vel_bool, (nan, desired_state_data[:,2].astype(float)) )
+
+    control_pitch_bool = (desired_state_data[:,3] != 'false')
+    pitch = np.choose(control_pitch_bool, (nan, desired_state_data[:,4].astype(float)) )
+
+    control_yaw_bool = (desired_state_data[:,5] != 'false')
+    yaw = np.choose(control_yaw_bool, (nan, desired_state_data[:,6].astype(float)) )
+
+    data_to_save = np.column_stack((time, vel, pitch, yaw))
+    np.savetxt(desired_state_data_file, data_to_save, fmt = "%.7f", delimiter = "\t", header = header)
+
+    return
+
 
     
 def saveEkfData(ekf_topic_file, ekf_data_file, start_time = 0):
@@ -196,50 +241,139 @@ def saveEkfData(ekf_topic_file, ekf_data_file, start_time = 0):
 
 def generatePlots(data_dir, plot_dir, start_time = -float("inf"), end_time = float("inf"), debug = True):
     if debug:
-        print "Generating plots and saving to ~/{}:".format(plot_dir)
+        print "Generating plots and saving to ./{}:".format(plot_dir)
 
     # NOTE: this function assumes that the IMU is in the incorrect position, and is reporting -vy for forward velocity
     # and the recorded roll is actually pitch
 
     # load data
-    t,x,y,z,r,p,y,vx,vy,vz = np.loadtxt(data_dir+"ekf.dat", delimiter="\t", comments="#", unpack=True)
-    ind = np.where( (start_time <= t)*(t <= end_time))
+    ekf_file = data_dir + "ekf.dat"
+    if not os.path.isfile(ekf_file):
+        ekf = None
+        if debug:
+            print "WARNING: No EKF file for plotting"
+    else:
+        ekf = Data() #empty class for storing data
+        ekf.t,ekf.x,ekf.y,ekf.z,ekf.r,ekf.p,ekf.y,ekf.vx,ekf.vy,ekf.vz = np.loadtxt(ekf_file, delimiter="\t", comments="#", unpack=True)
+        ekf.ind = np.where( (start_time <= ekf.t)*(ekf.t <= end_time))
+
+    desired_state_file = data_dir + "desired_state.dat"
+    if not os.path.isfile(desired_state_file):
+        desired_state = None
+        if debug:
+            print "\tWARNING: No desired state file for plotting"
+    else:
+        desired_state = Data() #empty class for storing data
+        desired_state.t,desired_state.vel,desired_state.pitch,desired_state.yaw = np.loadtxt(desired_state_file, delimiter="\t", comments="#", unpack=True)
+        ind = np.where( (start_time <= desired_state.t)*(desired_state.t <= end_time) )
+        desired_state.t = desired_state.t[ind]
+        desired_state.vel = desired_state.vel[ind]
+        desired_state.pitch = desired_state.pitch[ind]
+        desired_state.yaw = desired_state.yaw[ind]
+
+    control_input = Data()
+    top_control_input_file    = data_dir + "top_input.dat"
+    bottom_control_input_file = data_dir + "bottom_input.dat"
+    right_control_input_file  = data_dir + "right_input.dat"
+    left_control_input_file   = data_dir + "left_input.dat"
+
+    control_input.t_top,    control_input.top    = getControlInputData(top_control_input_file,    "top",    start_time, end_time)
+    control_input.t_bottom, control_input.bottom = getControlInputData(bottom_control_input_file, "bottom", start_time, end_time)
+    control_input.t_right,  control_input.right  = getControlInputData(right_control_input_file,  "right",  start_time, end_time)
+    control_input.t_left,   control_input.left   = getControlInputData(left_control_input_file,   "left",   start_time, end_time)
+
+    if not any([control_input.t_top != None,    control_input.top != None, \
+                control_input.t_bottom != None, control_input.bottom != None, \
+                control_input.t_right != None,  control_input.right != None, \
+                control_input.t_left != None,   control_input.left != None]):
+        control_input = None
+
     
-    # Forward velocity
-    fig, ax = plt.subplots( nrows = 1, ncols = 1)
-    ax.plot(t[ind],-vy[ind])
-    ax.grid(True)
-    ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Velocity (m/s)")
-    ax.set_title("Forward Velocity vs. Time")
-    vel_plot_file = plot_dir + "vel.png"
-    fig.savefig(vel_plot_file)
-    if debug:
-        print "\tSaving forward velocity plot as ~/{}".format(vel_plot_file)
+    if ekf:
+        # Forward velocity
+        fig, ax = plt.subplots( nrows = 1, ncols = 1)
+        ax.plot(ekf.t[ekf.ind],-ekf.vy[ekf.ind], label="Measured Velocity")
+        if desired_state:
+            ax.plot(desired_state.t, desired_state.vel, label="Desired Velocity")
+        ax.grid(True)
+        ax.legend(loc="best")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Velocity (m/s)")
+        ax.set_title("Forward Velocity vs. Time")
+        vel_plot_file = plot_dir + "vel.png"
+        fig.savefig(vel_plot_file)
+        if debug:
+            print "\tSaving forward velocity plot as ./{}".format(vel_plot_file)
 
-    # Pitch
-    fig, ax = plt.subplots( nrows = 1, ncols = 1)
-    ax.plot(t[ind],r[ind])
-    ax.grid(True)
-    ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Pitch (rad)")
-    ax.set_title("Pitch vs. Time")
-    pitch_plot_file = plot_dir + "pitch.png"
-    fig.savefig(pitch_plot_file)
-    if debug:
-        print "\tSaving pitch plot as ~/{}".format(pitch_plot_file)
+        # Pitch
+        fig, ax = plt.subplots( nrows = 1, ncols = 1)
+        ax.plot(ekf.t[ekf.ind],ekf.r[ekf.ind], label="Measured Pitch")
+        if desired_state:
+            ax.plot(desired_state.t, desired_state.pitch, label="Desired Pitch")
+        ax.grid(True)
+        ax.legend(loc="best")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Pitch (rad)")
+        ax.set_title("Pitch vs. Time")
+        pitch_plot_file = plot_dir + "pitch.png"
+        fig.savefig(pitch_plot_file)
+        if debug:
+            print "\tSaving pitch plot as ./{}".format(pitch_plot_file)
 
-    # Yaw
-    fig, ax = plt.subplots( nrows = 1, ncols = 1)
-    ax.plot(t[ind],y[ind])
-    ax.grid(True)
-    ax.set_xlabel("Time (s)")
-    ax.set_ylabel("Yaw (rad)")
-    ax.set_title("Yaw vs. Time")
-    yaw_plot_file = plot_dir + "yaw.png"
-    fig.savefig(yaw_plot_file)
-    if debug:
-        print "\tSaving yaw plot as ~/{}".format(yaw_plot_file)
+        # Yaw
+        fig, ax = plt.subplots( nrows = 1, ncols = 1)
+        ax.plot(ekf.t[ekf.ind],ekf.y[ekf.ind], label="Measured Yaw")
+        if desired_state:
+            ax.plot(desired_state.t, desired_state.yaw, label="Desired Yaw")
+        ax.grid(True)
+        ax.legend(loc="best")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Yaw (rad)")
+        ax.set_title("Yaw vs. Time")
+        yaw_plot_file = plot_dir + "yaw.png"
+        fig.savefig(yaw_plot_file)
+        if debug:
+            print "\tSaving yaw plot as ./{}".format(yaw_plot_file)
+
+    if control_input:
+        fig, ax = plt.subplots( nrows = 1, ncols = 1)
+        if control_input.t_top != None and control_input.top != None:
+            ax.plot(control_input.t_top, control_input.top, label="Top Input")
+        if control_input.t_bottom != None and control_input.bottom != None:
+            ax.plot(control_input.t_bottom, control_input.bottom, label="Bottom Input")
+        if control_input.t_right != None and control_input.right != None:
+            ax.plot(control_input.t_right, control_input.right, label="Right Input")
+        if control_input.t_left != None and control_input.left != None:
+            ax.plot(control_input.t_left, control_input.left, label="Left Input")
+        
+        ax.grid(True)
+        ax.legend(loc="best")
+        ax.set_xlabel("Time (s)")
+        ax.set_ylabel("Control Input")
+        ax.set_title("Control Input vs. Time")
+        control_input_plot_file = plot_dir + "input.png"
+        fig.savefig(control_input_plot_file)
+        if debug:
+            print "\tSaving control input plot file as ./{}".format(control_input_plot_file)
+
+
+
+
+def getControlInputData(control_input_file, name, start_time = -float('inf'), end_time = float('inf'), debug = True ):
+
+    if not os.path.isfile(control_input_file):
+        output_time = None
+        output_value = None
+        if debug:
+            print "WARNING: No {} control input file for plotting".format(name)
+    else:
+        output_time, output_value = np.loadtxt(control_input_file, delimiter="\t", comments="#", unpack=True)
+        ind = np.where( (start_time <= output_time)*(output_time <= end_time) )
+        output_time = output_time[ind]
+        output_value = output_value[ind]
+
+    return output_time, output_value
+
 
 def main():
     for input_file in sys.argv[1:]:
