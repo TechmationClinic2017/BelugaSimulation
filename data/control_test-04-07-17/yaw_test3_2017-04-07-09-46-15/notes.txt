@@ -1,0 +1,2 @@
+P = 22 D = 17.5
+Test was better but the controller still lags and overshoots

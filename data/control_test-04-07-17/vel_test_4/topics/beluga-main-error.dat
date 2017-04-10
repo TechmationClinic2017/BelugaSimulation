@@ -1,0 +1,4 @@
+%time,field.error_time,field.error_type,field.error_source,field.error_text,field.fatal
+1491588563715493682,1491588563.72,WIFI,beluga_alive.py,Lost connection with the user during teleoperation,1
+1491588590215391322,1491588590.22,WIFI,beluga_alive.py,Lost connection with the user during teleoperation,1
+1491588628115363900,1491588628.12,WIFI,beluga_alive.py,Lost connection with the user during teleoperation,1

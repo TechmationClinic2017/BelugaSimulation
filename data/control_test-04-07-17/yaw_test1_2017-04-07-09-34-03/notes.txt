@@ -1,0 +1,3 @@
+First yaw test.
+Looked good, but response was too slow.
+Going to increase P_yaw

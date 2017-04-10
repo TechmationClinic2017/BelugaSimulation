@@ -1,0 +1,3 @@
+P = 80 I = 10 D = 1.5
+Lots of steady state error
+plots are bad b/c used teleop

@@ -1,0 +1,4 @@
+Increased P
+Faster responce, but still too slow. 
+Going to slow down desired trajectory
+Had overshoot

@@ -1,0 +1,4 @@
+P = 10 D = 50
+Slow test, good tracking but had steady state error
+Most likely because the controller gives control inputs that don't move motors
+Going to increase P
