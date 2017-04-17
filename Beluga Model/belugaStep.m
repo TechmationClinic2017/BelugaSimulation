@@ -1,7 +1,7 @@
 % Beluga parameters
 
 
-m = 4.2173; % mass of Beluga (units?)
+m = 20.2; % mass of Beluga (kg)
 
 % Gravity Beluga
 xg = 0; 
