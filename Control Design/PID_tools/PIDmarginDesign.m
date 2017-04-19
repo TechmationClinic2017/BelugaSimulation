@@ -67,7 +67,7 @@ if CtoD==1
     a = num(1);
     b = num(2);
     c = num(3);
-    alpha = .2; %expoinential average factor (1=no effect)
+    alpha = 1; %expoinential average factor (1=no effect)
     Kp_d = -b-(1+1/alpha)*c;
     Ki_d = (1/Ts)*(a+b+c);
     Kd_d = (Ts/alpha)*c;
