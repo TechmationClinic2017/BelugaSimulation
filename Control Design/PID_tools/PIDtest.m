@@ -10,7 +10,7 @@ A = mps_all(i)/Rps_all(i);
 tau = tau_all(i);
 td = .09;
 w_co = 5;
-phi_m = 78; %phase magin (adjust)
+phi_m = 112; %phase magin (adjust)
 PoleRatio = 10;
 step = 1;
 CtoD = 1;
@@ -28,12 +28,13 @@ discrete_Kd = result(6)
 
 
 %SIMULINK
+sat_lim = 35;
 %physical disturbance
 d = 0; %distrubance magnitude
 dfreq = 10; %disturbance freq (Hz)
 
 %sensor noise
-v = 0; %sensor noise variance
+v = 0.00; %sensor noise variance
 sensorrate = 1/10; %sampling time (s)
 r = 1; %reference step
 %Simulink
