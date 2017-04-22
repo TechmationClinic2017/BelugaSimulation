@@ -1,0 +1,3 @@
+%time,field.header.seq,field.header.stamp,field.header.frame_id,field.level,field.name,field.msg,field.file,field.function,field.line,field.topics0
+1492803138375265702,36,1492803138258254163,,2,/record_1492803138138588123,Subscribing to /beluga/user_input/state_trajectory,/tmp/binarydeb/ros-indigo-rosbag-1.11.21/src/recorder.cpp,shared_ptr<ros::Subscriber> rosbag::Recorder::subscribe,211,/rosout
+1492803208079635257,37,1492803208079154968,,2,/state_machine,State machine transitioning 'CONTROLLER':'DONE'-->'READY',state_machine.py,_update_once,283,/beluga/main/errors_for_queue,/beluga/user_input,/beluga/main/state,/rosout,/beluga/main/error,/beluga/sensors/gps/fix,/beluga/sensors/imu
