@@ -42,7 +42,6 @@ Ki = double(Ki);
 Kp = double(Kp);
 Kd = double(Kd);
 
-constants = [Kp Ki Kd]; %output
 
 %closed loop step response
 s = tf('s');
@@ -63,9 +62,18 @@ if CtoD==1
     if step==1
         ltiview('step',Q,Qd);%plot continuous and discrete closed loop response
     end
-
+    %convert to standard discrete PID form
+    [num,den] = tfdata(Cd,'v');
+    a = num(1);
+    b = num(2);
+    c = num(3);
+    alpha = 1; %expoinential average factor (1=no effect)
+    Kp_d = -b-(1+1/alpha)*c;
+    Ki_d = (1/Ts)*(a+b+c);
+    Kd_d = (Ts/alpha)*c;
 elseif step==1
     ltiview('step',Q);
 end
 
+constants = [Kp Ki Kd Kp_d Ki_d Kd_d]; %output
 end
