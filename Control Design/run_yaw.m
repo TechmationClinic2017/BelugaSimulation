@@ -20,4 +20,4 @@ ref = ones(size(simout,1),1)*r_set;
 plot(simout, z, simout, ref)    
 xlabel('Time (s)');
 ylabel('Angle (rads)');
-title('Yaw Control(\pi/2)');
+title('Yaw Control (\pi/2)');

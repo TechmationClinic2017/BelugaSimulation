@@ -30,16 +30,19 @@ discrete_Kd = result(6)
 %SIMULINK
 sat_lim = 35;
 %physical disturbance
-d = 0; %distrubance magnitude
-dfreq = 10; %disturbance freq (Hz)
+d = 0.04; %distrubance magnitude (m/s)
+dfreq = 2; %disturbance freq (Hz)
 
 %sensor noise
-v = 0.00; %sensor noise variance
+v = 0.005; %sensor noise variance
 sensorrate = 1/10; %sampling time (s)
 r = 1; %reference step
 %Simulink
 sim('PIDsim.slx');
 plot(tout,yout);
+title('Simulink Model - Closed Loop Response');
+xlabel('Time (s)');
+ylabel('Velocity (m/s)');
 grid('on');
 
 
